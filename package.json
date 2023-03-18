@@ -1,25 +1,24 @@
 {
-  "name": "labecommerce-backend",
+  "name": "typescript-i-exercicios",
   "version": "1.0.0",
-  "description": "<h1>Node.js e package.json</h1>\r <H4>Node.js é um motor de execução, para interpreta o Js de forma independente, sua principal função é gerenciar as dependências do projeto</H4>\r <H4>package.json é um guia de dependências do projeto, ele guarda informções do projeto. Exemplo; nome, local, bibliotecas e scripts</H4>\r --------------------------------------------------\r <h1>Typescript I</h1>",
+  "description": "ATENÇÃO! Não forke nem clone esse repositório. Ele serve apenas como enunciado!<br><br>",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/index.js iniciou", 
-    "par-impar": "node ./nodepackage-json/par-impar.js 510238 "
+    "start": "tsc && node ./src/database.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ANj0Geladu/Labecommerce-BackEnd.git"
+    "url": "git+https://github.com/labenuexercicios/typescript-I-exercicios.git"
   },
-  "author": "victor",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ANj0Geladu/Labecommerce-BackEnd/issues"
+    "url": "https://github.com/labenuexercicios/typescript-I-exercicios/issues"
   },
-  "homepage": "https://github.com/ANj0Geladu/Labecommerce-BackEnd#readme",
+  "homepage": "https://github.com/labenuexercicios/typescript-I-exercicios#readme",
   "devDependencies": {
+    "@types/node": "^18.15.3",
     "typescript": "^5.0.2"
   }
 }
