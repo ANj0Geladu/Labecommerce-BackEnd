@@ -99,26 +99,44 @@ function getAllProducts(): TProduct[] {
 function getProductById(idToSearch: string): TProduct | undefined {
   return products.find((product: TProduct) => product.id === idToSearch);
 }
-function queryProductsByName(q: string): TProduct[] {
-  const lowerCaseQ = q.toLowerCase();
-  return products.filter((product: TProduct) => product.name.toLowerCase().includes(lowerCaseQ));
-}
 
-function createPurchase(userId: string, productId: string, quantity: number, totalPrice: number): string {
-  const newPurchase: TPurchase = {
-    userId,
-    productId,
-    quantity,
-    totalPrice
+export const queryProductsByName = (q: string): TProduct[] | undefined => {
+  const product = products.filter((item) =>
+    item.name.toLowerCase().includes(q.toLowerCase())
+  );
+
+  if (product.length < 1) {
+    console.log("Nenhum produto com esse id foi encontrado");
   }
+  return product;
+};
+
+export const createPurchase = (
+  userId: string,
+  productId: string,
+  quantity: number,
+  totalPrice: number
+) => {
+  if (!userId || !productId || !quantity || !totalPrice) {
+    console.log("Parâmetros faltando");
+  }
+
+  const newPurchase = { userId, productId, quantity, totalPrice };
   purchases.push(newPurchase);
   return "Compra realizada com sucesso";
-}
+};
 
-function getAllPurchasesFromUserId(userIdToSearch: string): TPurchase[] {
-  return purchases.filter((purchase: TPurchase) => purchase.userId === userIdToSearch);
-}
+export const getAllPurchasesFromUserId = (
+  userIdToSearch: string
+): TPurchase | undefined => {
+  const purchase = purchases.find((item) => item.userId === userIdToSearch);
 
+  if (!purchase) {
+    console.log("Esse cliente ainda não realizou nenhuma compra");
+  }
+
+  return purchase;
+};
 
 
 
