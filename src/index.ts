@@ -2,6 +2,7 @@ import { users, products, purchases } from "./database";
 import express, { Request, Response } from "express";
 import cors from "cors";
 import { ProductCategory, TProduct, TPurchase, TUser } from "./type";
+import { Knex } from "knex";
 
 const app = express();
 app.use(express.json());
@@ -460,3 +461,4 @@ try{
 });
 
 // console.log(users, products, purchases)
+
