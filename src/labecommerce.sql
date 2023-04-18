@@ -4,7 +4,7 @@
 
 SELECT * FROM  usuarioxs;
 
-
+--usuários
 CREATE TABLE usuarioxs (
 id TEXT PRIMARY KEY UNIQUE NOT NULL,
 email TEXT UNIQUE NOT NULL,
