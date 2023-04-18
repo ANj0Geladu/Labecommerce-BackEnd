@@ -29,7 +29,6 @@ CREATE TABLE products (
     category TEXT NOT NULL
 );
 
-
 --------aprofundamento SQL
 
 SELECT * FROM usuarioxs;
@@ -40,8 +39,6 @@ INSERT INTO usuarioxs
  (id, email, password) 
  VALUES 
  ('usuariox4', 'usuariox4@example.com', 'password4');
-
-
 
 
 INSERT INTO products 

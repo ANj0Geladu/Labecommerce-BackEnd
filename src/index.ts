@@ -3,6 +3,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import { ProductCategory, TProduct, TPurchase, TUser } from "./type";
 
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -317,10 +318,10 @@ app.get("/users/:id/purchases", (req: Request, res: Response) => {
 });
 
 //deleteUserById
-app.delete("/users/:id", (req: Request, res: Response) => {
+app.delete("/users/:id", async(req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const searchUserId = users.find((user) => user.id === id);
+    const searchUserId =  await db
     if (!searchUserId) {
       res.status(404);
       throw new Error("Usuário não existe. Verifique o 'id'");
