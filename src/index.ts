@@ -321,7 +321,7 @@ app.get("/users/:id/purchases", (req: Request, res: Response) => {
 app.delete("/users/:id", async(req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const searchUserId =  await db
+    // const searchUserId =  await db.raw(`SELECT * FROM `)
     if (!searchUserId) {
       res.status(404);
       throw new Error("Usuário não existe. Verifique o 'id'");
