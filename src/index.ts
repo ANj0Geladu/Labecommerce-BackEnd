@@ -4,15 +4,15 @@ import cors from "cors";
 import { ProductCategory, TProduct, TPurchase, TUser } from "./type";
 import { db } from "./knex";
 
+//uso do express
 const app = express();
-
 app.use(express.json());
-
 app.use(cors());
-
 app.listen(3003, () => {
   console.log("Servidor rodando na porta 3003");
 });
+
+
 
 app.get("/ping", (req: Request, res: Response) => {
   res.status(200).send("pong!");
@@ -39,16 +39,13 @@ app.get("/usuarioxs", async (req: Request, res: Response):Promise<void> => {
 //getAllProducts
 app.get("/products", async (req: Request, res: Response):Promise<void> => {
   try {
-    const products = await db.raw(`SELECT * FROM products`)
+    const [products] = await db.raw(`SELECT * FROM products`)
     res.status(200).send(products);
-
   } catch (error) {
     console.log(error);
-
     if (res.statusCode === 200) {
       res.status(500);
     }
-
     if(error instanceof Error){
       res.send(error.message);
     }else{
@@ -69,7 +66,7 @@ app.get("/products/search", (req: Request, res: Response) => {
       item.name.toLowerCase().includes(q.toLowerCase())
     );
     res.status(200).send(result);
-  } catch (error) {
+  } catch (error:any) {
     console.log(error);
     if (res.statusCode === 200) {
       res.status(500);
@@ -119,7 +116,7 @@ app.post("/users", (req: Request, res: Response) => {
     const newUser: TUser = { id, email, password };
     users.push(newUser);
     res.status(201).send("Usuário cadastrado com sucesso!");
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     if (res.statusCode === 200) {
       res.status(500);
@@ -129,25 +126,27 @@ app.post("/users", (req: Request, res: Response) => {
 });
 
 //createProduct
-app.post("/products", (req: Request, res: Response) => {
+app.post("/products", async(req: Request, res: Response) => {
   try {
     const { id, name, price, category }: TProduct = req.body;
-
-    if (!id) {
+    if (typeof id !== "string") {
       res.status(400);
-      throw new Error("'id' deve ser passado no body");
-    }
+      throw new Error("id invalido, deve ser string");
+    } 
 
+    await db.raw(`INSERT INTO (id, name, price, category)
+    VALUES ("${id}", "${name}", "${price}", "${category}")
+    `)
+
+    res.status(200).send("Usuário criado com sucesso");
     if (!name) {
       res.status(400);
       throw new Error("'name' deve ser passado no body");
     }
-
     if (!price) {
       res.status(400);
       throw new Error("'price' deve ser passado no body");
     }
-
     if (!ProductCategory) {
       res.status(400);
       throw new Error("'ProductCategory' deve ser passado no body");
@@ -159,7 +158,6 @@ app.post("/products", (req: Request, res: Response) => {
         throw new Error("'id' deve ser do tipo 'string'");
       }
     }
-
     if (name !== undefined) {
       if (typeof name !== "string") {
         res.status(400);
@@ -186,16 +184,18 @@ app.post("/products", (req: Request, res: Response) => {
         );
       }
     }
-
-    const searchId = products.find((product) => product.id === id);
+   
+    const [searchId] = await db.raw(`SELECT * FROM products WHERE id = "${id}"`);
     if (searchId) {
       res.status(400);
       throw new Error("Já existe um produto cadastrado com esse 'id'");
     }
+
     const newProduct: TProduct = { id, name, price, category };
     products.push(newProduct);
     res.status(201).send("Produto cadastrado com sucesso!");
-  } catch (error) {
+
+  } catch (error: any) {
     console.log(error);
     if (res.statusCode === 200) {
       res.status(500);
@@ -276,7 +276,7 @@ app.post("/purchases", (req: Request, res: Response) => {
     const newPurchase: TPurchase = { userId, productId, quantity, totalPrice };
     purchases.push(newPurchase);
     res.status(201).send("Compra realizada com sucesso!");
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     if (res.statusCode === 200) {
       res.status(500);
@@ -298,7 +298,7 @@ app.get("/products/:id", (req: Request, res: Response) => {
       );
     }
     res.status(200).send(result);
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     if (res.statusCode === 200) {
       res.status(500);
@@ -323,7 +323,7 @@ app.get("/users/:id/purchases", (req: Request, res: Response) => {
     );
 
     res.status(200).send(userPurchases);
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     if (res.statusCode === 200) {
       res.status(500);
@@ -333,21 +333,18 @@ app.get("/users/:id/purchases", (req: Request, res: Response) => {
 });
 
 //deleteUserById
-app.delete("/users/:id", (req: Request, res: Response):Promise<void>=> {
+app.delete("/users/:id", async(req: Request, res: Response)=> {
   try {
     const id = req.params.id;
-    const searchUserId = users.find((user) => user.id === id);
+    const [searchUserId] = await db.raw(`SELECT * FROM usuarioxs WHERE id = "${id}"`)
     if (!searchUserId) {
       res.status(404);
       throw new Error("Usuário não existe. Verifique o 'id'");
     }
-    const index = users.findIndex((user) => user.id === id);
-    if (index) {
-      users.splice(index, 1);
-    }
+    await db.raw(`DELETE FROM usuarioxs WHERE id ="${searchUserId.id}"`)
+    
     res.status(200).send("Usuário apagado com sucesso");
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
     if (res.statusCode === 200) {
       res.status(500);
     }
@@ -356,21 +353,18 @@ app.delete("/users/:id", (req: Request, res: Response):Promise<void>=> {
 });
 
 //deleteProductById
-app.delete("/products/:id", (req: Request, res: Response):Promise<void> => {
+app.delete("/products/:id", async(req: Request, res: Response) => {
 try{
   const id = req.params.id;
-  const searchProduct = products.find(product => product.id === id)
+  const [searchProduct] = await db.raw(`SELECT * FROM products WHERE id = "${id}"`)
   if(!searchProduct){
     res.status(404)
     throw new Error("Produto não existe. Verifique o 'id'")
   }
-  const index = products.findIndex((product) => product.id === id);
-  if (index) {
-    products.splice(index, 1);
-  }
+ await db.raw(`DELETE FROM products WHERE id ="${searchProduct.id}"`)
+
   res.status(200).send("Produto apagado com sucesso");
-} catch (error) {
-  console.log(error);
+} catch (error: any) {
   if (res.statusCode === 200) {
     res.status(500);
   }
@@ -379,14 +373,13 @@ try{
 });
 
 //editUserById
-app.put("/users/:id", (req: Request, res: Response) => {
+app.put("/users/:id", async(req: Request, res: Response) => {
  try{
   const id = req.params.id;
   const newEmail = req.body.email
   const newPassword = req.body.password
 
-  const searchUserId = users.find((user) => user.id === id);
-
+  const [searchUserId] = await db.raw(`SELECT * FROM usuarioxs WHERE id = "${id}"`);
     if (!searchUserId) {
       res.status(404);
       throw new Error("Usuário não existe. Verifique o 'id'");
@@ -411,7 +404,7 @@ app.put("/users/:id", (req: Request, res: Response) => {
     result.password = newPassword || result.password;
   }
   res.status(200).send("Cadastro atualizado com sucesso");
- } catch(error){
+ } catch(error: any){
   console.log(error)
   if (res.statusCode === 200) {
     res.status(500);
@@ -420,60 +413,60 @@ app.put("/users/:id", (req: Request, res: Response) => {
  }
 });
 
-//editProductById
-// app.put("/products/:id", (req: Request, res: Response) => {
+// editProductById
+app.put("/products/:id", (req: Request, res: Response) => {
 
-// try{
-//   const id = req.params.id;
-//   const newName = req.body.name
-//   const newPrice = req.body.price
-//   const newProductCategory = req.body.ProductCategory
+try{
+  const id = req.params.id;
+  const newName = req.body.name
+  const newPrice = req.body.price
+  const newProductCategory = req.body.ProductCategory
 
-//   const searchProduct = products.find(product => product.id === id)
-//   if(!searchProduct){
-//     res.status(404)
-//     throw new Error("Produto não encontrado. Verifique o 'id'")
-//   }
+  const searchProduct = products.find(product => product.id === id)
+  if(!searchProduct){
+    res.status(404)
+    throw new Error("Produto não encontrado. Verifique o 'id'")
+  }
  
-//   if(newName !== undefined){
-//     if(typeof newName !== "string"){
-//       res.status(400)
-//       throw new Error("'name' deve ser do tipo 'string'")
-//     }
-//   }
-//   if(newPrice !== undefined){
-//     if(typeof newPrice !== "number"){
-//       res.status(400)
-//       throw new Error("'price' deve ser do tipo 'number'")
-//     }
-//   }
-//   if (newProductCategory !== undefined) {
-//     if (
-//       newProductCategory !== ProductCategory.ACCESSORIES &&
-//       newProductCategory !== ProductCategory.CLOTHES_AND_SHOES &&
-//       newProductCategory !== ProductCategory.ELETRONICS
-//     ) {
-//       res.status(400);
-//       throw new Error(
-//         "'ProductCategory' deve ter um tipo válido: 'Acessórios', 'Roupas e calçados', 'Eletrônicos', 'Beleza', 'Banho'"
-//       );
-//     }
-//   }
-//   const result = products.find((product) => product.id === id);
-//   if (result) {
-//     result.name = newName || result.name;
-//     result.price = newPrice || result.price;
-//     result.category = newProductCategory || result.category;
-//   }
-//   res.status(200).send("Produto atualizado com sucesso");
-// } catch(error){
-//   console.log(error)
-//   if (res.statusCode === 200) {
-//     res.status(500);
-//   }
-//   res.send(error.message);
-//  }
-// });
+  if(newName !== undefined){
+    if(typeof newName !== "string"){
+      res.status(400)
+      throw new Error("'name' deve ser do tipo 'string'")
+    }
+  }
+  if(newPrice !== undefined){
+    if(typeof newPrice !== "number"){
+      res.status(400)
+      throw new Error("'price' deve ser do tipo 'number'")
+    }
+  }
+  if (newProductCategory !== undefined) {
+    if (
+      newProductCategory !== ProductCategory.ACCESSORIES &&
+      newProductCategory !== ProductCategory.CLOTHES_AND_SHOES &&
+      newProductCategory !== ProductCategory.ELETRONICS
+    ) {
+      res.status(400);
+      throw new Error(
+        "'ProductCategory' deve ter um tipo válido: 'Acessórios', 'Roupas e calçados', 'Eletrônicos', 'Beleza', 'Banho'"
+      );
+    }
+  }
+  const result = products.find((product) => product.id === id);
+  if (result) {
+    result.name = newName || result.name;
+    result.price = newPrice || result.price;
+    result.category = newProductCategory || result.category;
+  }
+  res.status(200).send("Produto atualizado com sucesso");
+} catch(error:any){
+  console.log(error)
+  if (res.statusCode === 200) {
+    res.status(500);
+  }
+  res.send(error.message);
+ }
+});
 
-// console.log(users, products, purchases)
+console.log(users, products, purchases)
 

@@ -44,18 +44,28 @@ INSERT INTO usuarioxs
 
 
 
+-- INSERT INTO products 
+-- (id, name, price, category) 
+-- VALUES 
+-- -- ('product1', 'Monitor LG 24', 699.99, 'Eletrônicos');
+
+
 INSERT INTO products 
-(id, name, price, category) 
-VALUES ('product1', 'Monitor LG 24"', 699.99, 'Eletrônicos');
+(id, name, price, category)
+VALUES
+('produto2', 'lampada', 651.94, 'Eletrônicos');
 
 
-SELECT * FROM products WHERE id = 'product1';
+INSERT INTO products (id, name, price, category)
+VALUES ('product2', 'lampada', 651.94, 'Eletrônicos');
+ 
+SELECT * FROM products;
+
 DELETE FROM usuarioxs WHERE id = 'usuariox4';
-DELETE FROM products WHERE id = 'product1';
+DELETE FROM products WHERE id = 'produto2';
 
 
 UPDATE usuarioxs SET email = 'new_email@example.com' WHERE id = 'usuariox1';
-
 
 UPDATE products SET price = 799.99 WHERE id = 'product2';
 
