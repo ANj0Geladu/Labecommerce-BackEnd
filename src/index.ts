@@ -4,15 +4,13 @@ import cors from "cors";
 import { ProductCategory, TProduct, TPurchase, TUser } from "./type";
 import { db } from "./knex";
 
-//uso do express
+
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.listen(3003, () => {
   console.log("Servidor rodando na porta 3003");
 });
-
-
 
 app.get("/ping", (req: Request, res: Response) => {
   res.status(200).send("pong!");
