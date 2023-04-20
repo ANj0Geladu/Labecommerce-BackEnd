@@ -30,8 +30,6 @@ CREATE TABLE products (
 );
 
 
---------aprofundamento SQL
-
 SELECT * FROM usuarioxs;
 
 SELECT * FROM products;
@@ -44,10 +42,10 @@ INSERT INTO usuarioxs
 
 
 
--- INSERT INTO products 
--- (id, name, price, category) 
--- VALUES 
--- -- ('product1', 'Monitor LG 24', 699.99, 'Eletrônicos');
+INSERT INTO products 
+(id, name, price, category) 
+VALUES 
+('product1', 'Monitor LG 24', 699.99, 'Eletrônicos');
 
 
 INSERT INTO products 
