@@ -10,9 +10,8 @@ Labecommerce-BackEnd é uma aplicação de APIrest para um e-commerce, vinculada
 
 
 ## 👥Equipe
-| <img src="https://media.licdn.com/dms/image/D4D03AQHBtLEgHbP_RQ/profile-displayphoto-shrink_800_800/0/1681615164458?e=1688601600&v=beta&t=vmaTCEFXlInJj8-2RpSA3Swl8y3OXuiUD5VXb8mA3yk" width=115><br><sub>Victor Santos</sub>(Victor Santos) |
+<img src="https://media.licdn.com/dms/image/D4D03AQHBtLEgHbP_RQ/profile-displayphoto-shrink_800_800/0/1681615164458?e=1688601600&v=beta&t=vmaTCEFXlInJj8-2RpSA3Swl8y3OXuiUD5VXb8mA3yk" width=115><br><sub>Victor Santos</sub>() 
 
-| :---: |
 
 ## 🧭Status do Projeto
 - ⏳Finalizado: Back-End
@@ -49,7 +48,7 @@ cors
 ![Node.js](https://img.shields.io/badge/node.js-20232A?style=for-the-badge&logo=node.js&logoColor=61DAFB)
 ![Git](https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-20232A?style=for-the-badge&logo=TypeScript&logoColor=61DAFB)
-![sql]([https://img.shields.io/badge/TypeScript-20232A?style=for-the-badge&logo=TypeScript&logoColor=61DAFB](https://img.shields.io/badge/SQL-E34F26?style=for-the-badge&logo=SQL5&logoColor=white)
+![sql]([https://img.shields.io/badge/TypeScript-20232A?style=for-the-badge&logo=TypeScript&logoColor=61DAFB](https://img.shields.io/badge/SQL-E34F26?)
 
 
 
