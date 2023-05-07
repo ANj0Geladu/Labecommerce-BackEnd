@@ -16,7 +16,7 @@ app.get("/ping", (req: Request, res: Response) => {
   res.status(200).send("pong!");
 });
 
-//getAllUsers
+//get usuarios
 app.get("/usuarioxs", async (req: Request, res: Response):Promise<void> => {
   try {
     const result = await db.raw(`SELECT * FROM usuarioxs;`)
@@ -34,7 +34,7 @@ app.get("/usuarioxs", async (req: Request, res: Response):Promise<void> => {
   }
 });
 
-//getAllProducts
+//get produtos
 app.get("/products", async (req: Request, res: Response):Promise<void> => {
   try {
     const [products] = await db.raw(`SELECT * FROM products`)
